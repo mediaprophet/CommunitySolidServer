@@ -1,12 +1,15 @@
 # Databox Organization Setup Ontology Plan
 
 ## Goal
+
 Revamp the Forge Admin "Setup Wizard" to generate a strict, semantically-correct, multi-tiered RDF graph topology when establishing a new organization on a Solid Pod, properly defining stewardship, software agents, and human operators.
 
 ## The Problem
+
 Currently, the setup process generates a flat `schema:Organization` node. It lacks the legal and operational structure required for a robust, decentralized trust system where tech consultants deploy systems on behalf of less-technical business owners.
 
 ## Proposed Semantic Topology
+
 When the Setup Wizard is executed, it will generate a linked graph:
 
 1. **The Human Stewards (`foaf:Person`)**:
@@ -23,12 +26,16 @@ When the Setup Wizard is executed, it will generate a linked graph:
 ## Implementation Steps
 
 ### 1. Update UI (`forge-admin/src/pages/setup/index.tsx`)
+
 Add a new "Stewards & Operators" section to the form:
+
 - **Business Owner WebID**: Input for the legal owner's WebID.
 - **Consultant / Administrator WebID**: Input for the tech consultant executing the setup.
 
 ### 2. Update RDF Graph Generation
+
 Rewrite the JSON-LD generation payload in the `handleSubmit` function of `setup/index.tsx`:
+
 ```json
 {
   "@context": {
@@ -69,4 +76,5 @@ Rewrite the JSON-LD generation payload in the `handleSubmit` function of `setup/
 ```
 
 ### 3. Commit to Repo
+
 This plan document will be stored permanently in `docs/architecture/setup-ontology-plan.md` to ensure architectural alignment moving forward.
