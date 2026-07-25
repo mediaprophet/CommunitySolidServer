@@ -1,5 +1,3 @@
-import { fileURLToPath } from 'node:url';
-
 const HOSP_TURTLE = `
 @prefix schema: <https://schema.org/> .
 

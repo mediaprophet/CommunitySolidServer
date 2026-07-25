@@ -1,4 +1,6 @@
-import { generateBusinessTemplateHtml, HOSPITALITY_GOURMET_THEME, TECH_ENTERPRISE_THEME, CIVICS_PUBLIC_THEME } from '../dist/databox/ipms/modules/theming/ThemePresets.js';
+/* eslint-disable antfu/no-import-dist, import/extensions */
+import fs from 'node:fs';
+import { CIVICS_PUBLIC_THEME, generateBusinessTemplateHtml, HOSPITALITY_GOURMET_THEME, TECH_ENTERPRISE_THEME } from '../dist/databox/ipms/modules/theming/ThemePresets.js';
 
 async function main() {
   console.log('Generating & Publishing Rich 3D WebGL Themed Websites for Solid Pods ...\n');
@@ -48,10 +50,8 @@ async function main() {
   console.log('- Civic Infrastructure (Civics): http://localhost:3000/civics/index.html\n');
 }
 
-import fs from 'node:fs';
-
 async function publishResource(url, content) {
-  const filename = new URL(url).pathname.split('/')[1] + '.html';
+  const filename = `${new URL(url).pathname.split('/')[1]}.html`;
   fs.writeFileSync(filename, content, 'utf-8');
   console.log(`Wrote ${filename} to local filesystem.`);
 }

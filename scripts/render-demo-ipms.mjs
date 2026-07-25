@@ -1,5 +1,3 @@
-import { fileURLToPath } from 'node:url';
-
 const turtle = `
 @prefix schema: <https://schema.org/> .
 
@@ -39,7 +37,7 @@ async function main() {
     body: JSON.stringify({
       state: {
         contentType: 'text/turtle',
-        turtle: turtle,
+        turtle,
       },
     }),
 
@@ -78,4 +76,3 @@ async function main() {
 }
 
 main().catch(console.error);
-

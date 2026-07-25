@@ -1,6 +1,7 @@
+/* eslint-disable sort-imports */
 import type { BlankNode, Literal, NamedNode, Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
-import { IPMS, DC, RDF } from '../../../../util/Vocabularies';
+import { DC, IPMS, RDF } from '../../../../util/Vocabularies';
 
 const SCHEMA = 'https://schema.org/';
 const RR = 'http://www.w3.org/ns/r2rml#';

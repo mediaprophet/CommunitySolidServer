@@ -1,10 +1,11 @@
+/* eslint-disable sort-imports, max-len */
 import type { Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
 import { BasicRepresentation } from '../../http/representation/BasicRepresentation';
 import type { ResourceStore } from '../../storage/ResourceStore';
 import { ensureTrailingSlash } from '../../util/PathUtil';
 import { readableToString } from '../../util/StreamUtil';
-import { IPMS, DC, RDF } from '../../util/Vocabularies';
+import { DC, IPMS, RDF } from '../../util/Vocabularies';
 import type { DataboxModuleRegistry } from './DataboxModuleRegistry';
 import type { ModuleConfigStore } from './ModuleConfigStore';
 import { setModuleEnabledFlag } from './ModuleConfigStore';

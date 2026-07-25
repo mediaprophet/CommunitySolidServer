@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import type { IpmsModuleRouter } from '../../IpmsModuleRouter';
 import type { HttpHandlerInput } from '../../../../server/HttpHandler';
 import { readJsonBody, writeJson } from '../../IpmsHttpUtils';

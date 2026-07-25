@@ -1,7 +1,8 @@
+/* eslint-disable sort-imports */
 import type { Literal, NamedNode, Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
 import type { SolidModuleManifest } from '../../SolidModuleManifest';
-import { IPMS, DC, RDF } from '../../../../util/Vocabularies';
+import { DC, IPMS, RDF } from '../../../../util/Vocabularies';
 
 const SCHEMA = 'https://schema.org/';
 const XSD = 'http://www.w3.org/2001/XMLSchema#';

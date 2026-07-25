@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import type { Quad } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
 import { BasicRepresentation } from '../../http/representation/BasicRepresentation';

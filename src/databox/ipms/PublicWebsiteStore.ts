@@ -1,3 +1,4 @@
+/* eslint-disable max-len, @stylistic/array-bracket-spacing */
 import { BasicRepresentation } from '../../http/representation/BasicRepresentation';
 import type { ResourceIdentifier } from '../../http/representation/ResourceIdentifier';
 import type { ResourceStore } from '../../storage/ResourceStore';
@@ -120,7 +121,7 @@ export class PublicWebsiteStore {
     for (const asset of assets) {
       const identifier = this.identifier(`${base}${asset.suffix}`);
       const buffer = Buffer.from(asset.content, 'utf8');
-      await this.store.setRepresentation(identifier, new BasicRepresentation([buffer], asset.contentType));
+      await this.store.setRepresentation(identifier, new BasicRepresentation([ buffer ], asset.contentType));
       await this.setPublicAcl(identifier.path);
       persisted.push({ iri: identifier.path, role: asset.role, contentType: asset.contentType });
     }

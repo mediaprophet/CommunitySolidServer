@@ -1,6 +1,7 @@
+/* eslint-disable sort-imports */
 import type { Literal, NamedNode, Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
-import { IPMS, DC, LDP, RDF } from '../../util/Vocabularies';
+import { DC, IPMS, LDP, RDF } from '../../util/Vocabularies';
 import type { SolidModuleManifest } from './SolidModuleManifest';
 import { parseModuleManifestRdf, serializeModuleManifestToTurtle } from './ModuleManifestRdf';
 

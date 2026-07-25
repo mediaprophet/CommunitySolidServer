@@ -1,5 +1,5 @@
 import { DataFactory } from 'n3';
-import { IPMS, createVocabulary, extendVocabulary, UI } from '../../../src/util/Vocabularies';
+import { createVocabulary, extendVocabulary, IPMS, UI } from '../../../src/util/Vocabularies';
 
 describe('Vocabularies', (): void => {
   const vocabulary = createVocabulary('http://www.w3.org/ns/ldp#', 'contains', 'Container');

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { BadRequestHttpError } from '../../util/errors/BadRequestHttpError';
 import { ConflictHttpError } from '../../util/errors/ConflictHttpError';
 import { BasicRepresentation } from '../../http/representation/BasicRepresentation';

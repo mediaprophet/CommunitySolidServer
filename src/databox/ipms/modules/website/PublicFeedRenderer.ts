@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/no-trailing-spaces, @stylistic/quote-props, @stylistic/quotes, @stylistic/comma-dangle, max-len, @stylistic/no-multiple-empty-lines */
 import type { Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser } from 'n3';
 import { BadRequestHttpError } from '../../../../util/errors/BadRequestHttpError';
@@ -263,25 +264,25 @@ function buildPublicJsonLd(
     ...menus,
   ];
   return {
-    [LD_CONTEXT]: { 
+    [LD_CONTEXT]: {
       [LD_VOCAB]: SCHEMA,
-      "odrl": "http://www.w3.org/ns/odrl/2/"
+      odrl: 'http://www.w3.org/ns/odrl/2/',
     },
     [LD_TYPE]: 'WebPage',
     [LD_ID]: input.business.url,
     url: input.business.url,
     name: input.business.name,
     ...input.generatedAt === undefined ? {} : { dateModified: input.generatedAt },
-    "odrl:hasPolicy": {
-      "@type": "odrl:Set",
-      "odrl:permission": [{
-        "odrl:action": "odrl:read",
-        "odrl:assigner": { "@id": input.business.id }
+    'odrl:hasPolicy': {
+      '@type': 'odrl:Set',
+      'odrl:permission': [{
+        'odrl:action': 'odrl:read',
+        'odrl:assigner': { '@id': input.business.id },
       }],
-      "odrl:prohibition": [{
-        "odrl:action": "odrl:commercialize",
-        "odrl:assigner": { "@id": input.business.id }
-      }]
+      'odrl:prohibition': [{
+        'odrl:action': 'odrl:commercialize',
+        'odrl:assigner': { '@id': input.business.id },
+      }],
     },
     mainEntity: business,
     hasPart,
@@ -494,7 +495,6 @@ function renderHtml(input: ReturnType<typeof validateInput>, jsonLd: Record<stri
     '</html>',
   ].join('');
 }
-
 
 function htmlHeaders(maxAge: number): PublicFeedHeaders {
   return {

@@ -1,4 +1,5 @@
-import type { DesignTokenTree, PortableThemePackage } from './Tokens';
+/* eslint-disable unused-imports/no-unused-imports, max-len, @stylistic/quotes, @stylistic/arrow-parens */
+import type { PortableThemePackage } from './Tokens';
 import { themeToCss, validateThemePackage } from './Tokens';
 
 export interface BusinessThemePreset {
@@ -28,8 +29,8 @@ export const HOSPITALITY_GOURMET_THEME: PortableThemePackage = validateThemePack
       border: { $type: 'color', $value: 'rgba(251, 191, 36, 0.2)', $description: 'Gold glass border' },
     },
     font: {
-      heading: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
-      body: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
+      heading: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
+      body: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
     },
     radius: {
       card: { $type: 'dimension', $value: '20px' },
@@ -55,8 +56,8 @@ export const TECH_ENTERPRISE_THEME: PortableThemePackage = validateThemePackage(
       border: { $type: 'color', $value: 'rgba(6, 182, 212, 0.25)', $description: 'Cyan glass border' },
     },
     font: {
-      heading: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
-      body: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
+      heading: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
+      body: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
     },
     radius: {
       card: { $type: 'dimension', $value: '16px' },
@@ -82,8 +83,8 @@ export const CIVICS_PUBLIC_THEME: PortableThemePackage = validateThemePackage({
       border: { $type: 'color', $value: 'rgba(147, 197, 253, 0.2)', $description: 'Platinum glass border' },
     },
     font: {
-      heading: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
-      body: { $type: 'fontFamily', $value: "'Outfit', sans-serif" },
+      heading: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
+      body: { $type: 'fontFamily', $value: '\'Outfit\', sans-serif' },
     },
     radius: {
       card: { $type: 'dimension', $value: '18px' },
@@ -109,7 +110,7 @@ export function generateBusinessTemplateHtml(
 
   const itemsHtml = business.items
     .map(
-      (item) => `
+      item => `
       <div class="card reveal">
         <div class="card-header">
           <h3>${escapeHtml(item.name)}</h3>
@@ -374,5 +375,5 @@ function escapeHtml(value: string): string {
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replaceAll('\'', '&#39;');
 }
