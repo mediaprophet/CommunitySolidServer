@@ -110,6 +110,15 @@ export interface ShaclValidator {
    * @returns The validation result. If `conforms` is false, the publication MUST be blocked.
    */
   validate(podResourceIri: string): Promise<ShaclValidationResult>;
+
+  /**
+   * Validate pre-parsed RDF content against the loaded SHACL shapes.
+   * @param rdfContent The RDF content as a string.
+   * @param contentType The media type of the RDF content.
+   * @param shapeIri The shape IRI to validate against.
+   * @returns The validation result.
+   */
+  validateContent(rdfContent: string, contentType: string, shapeIri: string): Promise<ShaclValidationResult>;
 }
 
 /**
