@@ -1,4 +1,4 @@
-/* eslint-disable @stylistic/no-trailing-spaces, @stylistic/quote-props, @stylistic/quotes, @stylistic/comma-dangle, max-len, @stylistic/no-multiple-empty-lines */
+/* eslint-disable max-len */
 import type { Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser } from 'n3';
 import { BadRequestHttpError } from '../../../../util/errors/BadRequestHttpError';

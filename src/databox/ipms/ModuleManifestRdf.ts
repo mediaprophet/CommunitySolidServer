@@ -1,4 +1,3 @@
-/* eslint-disable sort-imports */
 import type { BlankNode, Literal, NamedNode, Quad, Term } from '@rdfjs/types';
 import { DataFactory, Parser, Writer } from 'n3';
 import { DC, IPMS, RDF } from '../../util/Vocabularies';

@@ -1,4 +1,4 @@
-/* eslint-disable unused-imports/no-unused-imports, max-len, @stylistic/quotes, @stylistic/arrow-parens */
+/* eslint-disable max-len */
 import type { PortableThemePackage } from './Tokens';
 import { themeToCss, validateThemePackage } from './Tokens';
 

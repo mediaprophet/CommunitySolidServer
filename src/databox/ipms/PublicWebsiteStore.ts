@@ -1,4 +1,4 @@
-/* eslint-disable max-len, @stylistic/array-bracket-spacing */
+/* eslint-disable max-len */
 import { BasicRepresentation } from '../../http/representation/BasicRepresentation';
 import type { ResourceIdentifier } from '../../http/representation/ResourceIdentifier';
 import type { ResourceStore } from '../../storage/ResourceStore';
