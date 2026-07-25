@@ -4,6 +4,8 @@
 **Depends on:** ADR-0016 (integration plane), ADR-0017 (data exchange), ADR-0023 (record awareness/correction), `databox/compliance/` (Web Civics corpus).
 **Relates to:** `databox/deployment/ipms/` (Kubernetes skeleton), `src/databox/bridge/` (existing institutional bridge).
 
+> **This is an opt-in deployment profile, not a universal requirement.** The CKAN bridge is a specialised integration profile for government and CKAN-using organisations. It does not change the default Community Solid Server install path, does not alter the Databox extension's core invariants, and is not required for non-CKAN Databox deployments. A Databox provider opts into this profile by deploying the bridge microservice, the CKAN instance, and the thin Python plugin. The universal Databox invariants (program isolation, pairwise identity, append-only evidence, explicit consumer submission, etc.) apply unchanged; the CKAN profile supplies program-specific facts and integration configuration on top of them, following the same pattern as the IPMS deployment profile (`databox/deployment/ipms/`).
+
 ---
 
 ## 1. Purpose
@@ -15,7 +17,7 @@ Governments and other CKAN users need a way to publish, catalogue, and share dat
 - CKAN to act as the public-facing catalogue and search index (backed by PostgreSQL + Solr) while the Solid Pod layer retains the authoritative, consent-bound source records.
 - Compliance with the Web Civics ontology boundary: "Civics" (natural-person activity) stays in the Pod; "Civic" (institutional artifact) stays in CKAN. The bridge is the enforced boundary between them.
 
-This specification does **not** describe a monolithic Python extension. It describes a hybrid microservice architecture with a minimal Python CKAN plugin and a separately deployable bridge service.
+This specification does **not** describe a monolithic Python extension. It describes a hybrid microservice architecture with a minimal Python CKAN plugin and a separately deployable bridge service, deployed as an **opt-in profile** by organisations that need CKAN integration.
 
 ---
 
