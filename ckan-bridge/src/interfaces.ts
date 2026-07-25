@@ -175,8 +175,15 @@ export interface CorrectionPropagator {
   /**
    * Propagate a correction disposition to CKAN.
    * @param job The correction propagation job.
+   * @returns The updated job with recipient duty states.
    */
-  propagate(job: CorrectionPropagationJob): Promise<void>;
+  propagate(job: CorrectionPropagationJob): Promise<CorrectionPropagationJob>;
+
+  /**
+   * Get the status of a correction propagation job.
+   * @param idempotencyKey The idempotency key.
+   */
+  getJobStatus(idempotencyKey: string): Promise<CorrectionPropagationJob | undefined>;
 }
 
 /**
