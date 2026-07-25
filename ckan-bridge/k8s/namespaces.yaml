@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ckan-bridge
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+    databox.org/profile: ckan-bridge
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ckan
+  labels:
+    app.kubernetes.io/name: ckan
+    databox.org/profile: ckan-bridge

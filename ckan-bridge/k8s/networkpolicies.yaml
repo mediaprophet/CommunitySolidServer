@@ -1,0 +1,118 @@
+# Network Policy: Only the ckan-bridge namespace can reach CKAN API write endpoints.
+# CSS and CKAN MUST NOT be able to talk to each other directly.
+# Consumer agents reach CSS via the public ingress only.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bridge-only-ckan-writes
+  namespace: ckan
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+    databox.org/profile: ckan-bridge
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ckan
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow the bridge to reach CKAN on the CKAN API port
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ckan-bridge
+      ports:
+        - protocol: TCP
+          port: 5000
+    # Allow public ingress to CKAN on the CKAN API port (read-only access via CKAN auth)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 5000
+---
+# Network Policy: Only the bridge can reach CSS internal IPs beyond the public ingress.
+# CSS pods must NOT accept direct connections from CKAN or consumer agents.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bridge-only-pod-reads
+  namespace: databox
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+    databox.org/profile: ckan-bridge
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: databox-ipms
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow the bridge to reach CSS on the CSS port (Pod reads via Solid-OIDC)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ckan-bridge
+      ports:
+        - protocol: TCP
+          port: 3000
+    # Allow public ingress to CSS (consumer agents via the public ingress)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+---
+# Network Policy: The bridge can only egress to CKAN and CSS — nothing else.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bridge-egress-restricted
+  namespace: ckan-bridge
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+    databox.org/profile: ckan-bridge
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ckan-bridge
+  policyTypes:
+    - Egress
+  egress:
+    # DNS resolution
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # To CKAN (in the ckan namespace)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ckan
+      ports:
+        - protocol: TCP
+          port: 5000
+    # To CSS (in the databox namespace)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: databox-ipms
+      ports:
+        - protocol: TCP
+          port: 3000
+    # To the Databox authorization server / broker (for Solid-OIDC token acquisition)
+    # This is typically in the databox namespace or a dedicated idp namespace.
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: databox-ipms
+      ports:
+        - protocol: TCP
+          port: 3001

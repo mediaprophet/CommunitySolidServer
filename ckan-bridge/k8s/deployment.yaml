@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ckan-bridge
+  namespace: ckan-bridge
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ckan-bridge
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ckan-bridge
+    spec:
+      containers:
+        - name: ckan-bridge
+          image: ckan-bridge:local
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: ckan-bridge-config
+          env:
+            - name: CKAN_API_TOKEN_FILE
+              value: /run/secrets/ckan-api-token
+            - name: BRIDGE_DPOP_KEY_FILE
+              value: /run/secrets/bridge-dpop-key
+            - name: BRIDGE_SHACL_SHAPES_FILE
+              value: /config/shapes.ttl
+            - name: BRIDGE_PROGRAM_PROFILE_FILE
+              value: /run/secrets-profile/program-profile.json
+            - name: BRIDGE_WEBHOOK_SECRET_FILE
+              value: /run/secrets/webhook-secret
+          ports:
+            - name: http
+              containerPort: 3001
+          volumeMounts:
+            - name: ckan-bridge-secrets
+              mountPath: /run/secrets
+              readOnly: true
+            - name: ckan-bridge-profile
+              mountPath: /run/secrets-profile
+              readOnly: true
+            - name: ckan-bridge-shacl
+              mountPath: /config
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: ckan-bridge-secrets
+          secret:
+            secretName: ckan-bridge-secrets
+            items:
+              - key: ckan-api-token
+                path: ckan-api-token
+              - key: bridge-dpop-key
+                path: bridge-dpop-key
+              - key: webhook-secret
+                path: webhook-secret
+        - name: ckan-bridge-profile
+          secret:
+            secretName: ckan-bridge-profile
+            items:
+              - key: program-profile.json
+                path: program-profile.json
+        - name: ckan-bridge-shacl
+          configMap:
+            name: ckan-bridge-shacl-shapes

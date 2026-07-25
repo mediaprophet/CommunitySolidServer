@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "ckanext-databox-bridge"
+version = "0.1.0"
+description = "Thin CKAN plugin for the Databox CKAN Bridge — emits webhooks and exposes bridge callback actions. No business logic."
+license = "MIT"
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.28.0",
+]
+
+[project.entry-points."ckan.plugins"]
+databox_bridge = "ckanext.databox_bridge.plugin:DataboxBridgePlugin"
+
+[tool.setuptools.packages.find]
+where = ["src"]

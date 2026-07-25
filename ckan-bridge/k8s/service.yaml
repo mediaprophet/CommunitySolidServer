@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ckan-bridge
+  namespace: ckan-bridge
+  labels:
+    app.kubernetes.io/name: ckan-bridge
+spec:
+  selector:
+    app.kubernetes.io/name: ckan-bridge
+  ports:
+    - name: http
+      port: 3001
+      targetPort: http
+  type: ClusterIP
