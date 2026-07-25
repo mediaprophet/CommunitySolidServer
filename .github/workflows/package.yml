@@ -122,13 +122,13 @@ jobs:
         if: matrix.archive == 'tar.gz'
         run: |
           mkdir -p release-dist
-          tar -czf release-dist/databox-cms-${{ matrix.asset }}.tar.gz -C release "Databox CMS"
+          tar -czf release-dist/databox-ipms-${{ matrix.asset }}.tar.gz -C release "Databox IPMS"
       - name: Archive desktop product (Windows)
         if: matrix.archive == 'zip'
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force release-dist
-          Compress-Archive -Path 'release/Databox CMS/*' -DestinationPath 'release-dist/databox-cms-${{ matrix.asset }}.zip'
+          Compress-Archive -Path 'release/Databox IPMS/*' -DestinationPath 'release-dist/databox-ipms-${{ matrix.asset }}.zip' -Force
       - name: Upload desktop package
         uses: actions/upload-artifact@v4
         with:
