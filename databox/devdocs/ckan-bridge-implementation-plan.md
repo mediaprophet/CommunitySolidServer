@@ -1,4 +1,4 @@
-# CKAN Bridge Implementation Plan
+﻿# CKAN Bridge Implementation Plan
 
 ## Purpose
 
@@ -439,9 +439,9 @@ Completion is an evidence-backed state, not the exhaustion of a prompt count. Ne
 
 | Prompt | Status | Agent level | Dependencies | Handoff | Last updated |
 |---|---|---|---|---|---|
-| CKAN-01 | not-ready | Medium | DBX-24 | — | — |
-| CKAN-02 | not-ready | Easy | CKAN-01 | — | — |
-| CKAN-03 | not-ready | Hard | CKAN-01 | — | — |
+| CKAN-01 | accepted | Medium | DBX-24 | CKAN-01.md | 2026-07-25 |
+| CKAN-02 | ready | Easy | CKAN-01 | - | - |
+| CKAN-03 | ready | Hard | CKAN-01 | - | - |
 | CKAN-04 | not-ready | Hard | CKAN-01, CKAN-03 | — | — |
 | CKAN-05 | not-ready | Hard | CKAN-04 | — | — |
 | CKAN-06 | not-ready | Medium | CKAN-02, CKAN-03 | — | — |

@@ -1,0 +1,32 @@
+{
+  "name": "@databox/ckan-bridge",
+  "version": "0.1.0",
+  "description": "CKAN Bridge — an opt-in deployment profile for publishing Solid Databox data to CKAN. Does not modify CSS core or Databox invariants.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src test --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.0"
+  },
+  "dependencies": {
+    "rdf-parse": "^2.1.0",
+    "rdf-validate-shacl": "^0.5.0",
+    "n3": "^1.17.0",
+    "@solid/access-token-verifier": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.4.0"
+  }
+}
