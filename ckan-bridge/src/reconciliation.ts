@@ -97,9 +97,9 @@ export class InMemoryReconciliationService implements ReconciliationService {
         }
 
         // Check for editor-originated drift by comparing the provenance IRI
-        const extras = (ckanDataset as { extras?: { key: string; value: string }[] }).extras ?? [];
-        const provenanceExtra = extras.find(e => e.key === 'databox_provenance_iri');
-        if (provenanceExtra && provenanceExtra.value !== job.podResourceIri) {
+        const extras = ckanDataset.extras ?? {};
+        const provenanceValue = extras['databox_provenance_iri'];
+        if (provenanceValue !== undefined && provenanceValue !== job.podResourceIri) {
           drifts.push({
             type: 'editor-originated',
             podResourceIri: job.podResourceIri,
