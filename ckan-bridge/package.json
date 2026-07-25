@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "CKAN Bridge — an opt-in deployment profile for publishing Solid Databox data to CKAN. Does not modify CSS core or Databox invariants.",
   "license": "MIT",
-  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
