@@ -39,6 +39,21 @@ class MockCkanClient implements CkanActionClient {
   async datastoreUpsert(): Promise<CkanActionResponse> {
     return { action: 'datastore_upsert', success: true };
   }
+  async datastoreSearch(): Promise<CkanActionResponse> {
+    return { action: 'datastore_search', success: true };
+  }
+  async organizationShow(): Promise<CkanActionResponse> {
+    return { action: 'organization_show', success: true };
+  }
+  async organizationCreate(): Promise<CkanActionResponse> {
+    return { action: 'organization_create', success: true };
+  }
+  async userShow(): Promise<CkanActionResponse> {
+    return { action: 'user_show', success: true };
+  }
+  async activityDataList(): Promise<CkanActionResponse> {
+    return { action: 'activity_data_list', success: true };
+  }
 }
 
 function makeJob(overrides: Partial<PublicationJob> = {}): PublicationJob {

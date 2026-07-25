@@ -22,6 +22,21 @@ class MockCkanClient {
   async datastoreUpsert(): Promise<{ action: string; success: true }> {
     return { action: 'datastore_upsert', success: true };
   }
+  async datastoreSearch(): Promise<{ action: string; success: true }> {
+    return { action: 'datastore_search', success: true };
+  }
+  async organizationShow(): Promise<{ action: string; success: true }> {
+    return { action: 'organization_show', success: true };
+  }
+  async organizationCreate(): Promise<{ action: string; success: true }> {
+    return { action: 'organization_create', success: true };
+  }
+  async userShow(): Promise<{ action: string; success: true }> {
+    return { action: 'user_show', success: true };
+  }
+  async activityDataList(): Promise<{ action: string; success: true }> {
+    return { action: 'activity_data_list', success: true };
+  }
 }
 
 function makeJob(overrides: Partial<CorrectionPropagationJob> = {}): CorrectionPropagationJob {

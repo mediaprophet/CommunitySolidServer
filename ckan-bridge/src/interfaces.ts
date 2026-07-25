@@ -45,6 +45,21 @@ export interface CkanActionClient {
 
   /** Convenience: call datastore_upsert. */
   datastoreUpsert(resourceId: string, records: unknown[], method?: 'insert' | 'update' | 'upsert'): Promise<CkanActionResponse>;
+
+  /** Convenience: call datastore_search. */
+  datastoreSearch(resourceId: string, limit?: number, offset?: number): Promise<CkanActionResponse>;
+
+  /** Convenience: call organization_show. */
+  organizationShow(id: string): Promise<CkanActionResponse>;
+
+  /** Convenience: call organization_create. */
+  organizationCreate(data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse>;
+
+  /** Convenience: call user_show. */
+  userShow(id: string): Promise<CkanActionResponse>;
+
+  /** Convenience: call activity_data_list. */
+  activityDataList(id: string, limit?: number): Promise<CkanActionResponse>;
 }
 
 /** A CKAN package (dataset) as returned by package_show / package_create. */

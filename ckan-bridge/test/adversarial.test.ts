@@ -119,6 +119,11 @@ describe('CKAN-14: Adversarial security tests', () => {
         packageUpdate: async (id: string) => ({ action: 'package_update', success: true, result: { id, name: 'x', title: 'x' } }),
         datastoreCreate: async () => ({ action: 'datastore_create', success: true }),
         datastoreUpsert: async () => ({ action: 'datastore_upsert', success: true }),
+        datastoreSearch: async () => ({ action: 'datastore_search', success: true }),
+        organizationShow: async () => ({ action: 'organization_show', success: true }),
+        organizationCreate: async () => ({ action: 'organization_create', success: true }),
+        userShow: async () => ({ action: 'user_show', success: true }),
+        activityDataList: async () => ({ action: 'activity_data_list', success: true }),
       };
 
       const mockTranslator = {

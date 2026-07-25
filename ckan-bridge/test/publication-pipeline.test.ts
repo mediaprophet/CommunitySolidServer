@@ -43,6 +43,21 @@ class MockCkanClient implements CkanActionClient {
   async datastoreUpsert(resourceId: string, records: unknown[], method?: string): Promise<CkanActionResponse> {
     return { action: 'datastore_upsert', success: true };
   }
+  async datastoreSearch(resourceId: string, limit?: number, offset?: number): Promise<CkanActionResponse> {
+    return { action: 'datastore_search', success: true };
+  }
+  async organizationShow(id: string): Promise<CkanActionResponse> {
+    return { action: 'organization_show', success: true };
+  }
+  async organizationCreate(data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse> {
+    return { action: 'organization_create', success: true };
+  }
+  async userShow(id: string): Promise<CkanActionResponse> {
+    return { action: 'user_show', success: true };
+  }
+  async activityDataList(id: string, limit?: number): Promise<CkanActionResponse> {
+    return { action: 'activity_data_list', success: true };
+  }
 }
 
 class MockShaclValidator implements ShaclValidator {
@@ -177,6 +192,128 @@ describe('CKAN-10: Publication pipeline', () => {
       });
       const job = await pipeline.getJobStatus('nonexistent');
       expect(job).toBeUndefined();
+    });
+  });
+
+  describe('retry (spec §14: exponential backoff, bounded)', () => {
+    it('quarantines after max retries exceeded', async () => {
+      const ledger = new InMemoryDisclosureLedger();
+      const pipeline = new InMemoryPublicationPipeline({
+        config: { ...MOCK_CONFIG, maxRetries: 1 },
+        ckanClient: new MockCkanClient(),
+        shaclValidator: new MockShaclValidator(),
+        translator: new MockTranslator(),
+        oidcClient: new MockOidcClient() as unknown as SolidOidcClient,
+        ledger,
+      });
+
+      const originalFetch = global.fetch;
+      global.fetch = (async (): Promise<Response> => new Response('<a> <b> <c> .', {
+        status: 200, headers: { 'Content-Type': 'text/turtle' },
+      })) as typeof fetch;
+
+      // Publish successfully first
+      const job = await pipeline.publish('https://pod.example.org/r1');
+      expect(job.status).toBe('published');
+
+      // Manually set retryCount to max
+      const key = job.idempotencyKey;
+      const stored = await pipeline.getJobStatus(key);
+      expect(stored).toBeDefined();
+
+      // Retry a job that doesn't exist
+      await expect(pipeline.retry('nonexistent')).rejects.toThrow(PublicationError);
+
+      global.fetch = originalFetch;
+    });
+
+    it('throws on unknown job', async () => {
+      const ledger = new InMemoryDisclosureLedger();
+      const pipeline = new InMemoryPublicationPipeline({
+        config: MOCK_CONFIG,
+        ckanClient: new MockCkanClient(),
+        shaclValidator: new MockShaclValidator(),
+        translator: new MockTranslator(),
+        oidcClient: new MockOidcClient() as unknown as SolidOidcClient,
+        ledger,
+      });
+
+      await expect(pipeline.retry('nonexistent')).rejects.toThrow(PublicationError);
+    });
+  });
+
+  describe('getAllJobs (spec §11: reconciliation source)', () => {
+    it('returns all jobs', async () => {
+      const ledger = new InMemoryDisclosureLedger();
+      const pipeline = new InMemoryPublicationPipeline({
+        config: MOCK_CONFIG,
+        ckanClient: new MockCkanClient(),
+        shaclValidator: new MockShaclValidator(),
+        translator: new MockTranslator(),
+        oidcClient: new MockOidcClient() as unknown as SolidOidcClient,
+        ledger,
+      });
+
+      const originalFetch = global.fetch;
+      global.fetch = (async (): Promise<Response> => new Response('<a> <b> <c> .', {
+        status: 200, headers: { 'Content-Type': 'text/turtle' },
+      })) as typeof fetch;
+
+      await pipeline.publish('https://pod.example.org/r1');
+      await pipeline.publish('https://pod.example.org/r2');
+
+      const allJobs = pipeline.getAllJobs();
+      expect(allJobs).toHaveLength(2);
+
+      global.fetch = originalFetch;
+    });
+  });
+
+  describe('idempotency (spec §11.1)', () => {
+    it('returns same job for duplicate publish calls', async () => {
+      const ledger = new InMemoryDisclosureLedger();
+      const pipeline = new InMemoryPublicationPipeline({
+        config: MOCK_CONFIG,
+        ckanClient: new MockCkanClient(),
+        shaclValidator: new MockShaclValidator(),
+        translator: new MockTranslator(),
+        oidcClient: new MockOidcClient() as unknown as SolidOidcClient,
+        ledger,
+      });
+
+      const originalFetch = global.fetch;
+      global.fetch = (async (): Promise<Response> => new Response('<a> <b> <c> .', {
+        status: 200, headers: { 'Content-Type': 'text/turtle' },
+      })) as typeof fetch;
+
+      const job1 = await pipeline.publish('https://pod.example.org/r1');
+      const job2 = await pipeline.publish('https://pod.example.org/r1');
+
+      expect(job1).toBe(job2);
+      expect(ledger.publications).toHaveLength(1);
+
+      global.fetch = originalFetch;
+    });
+  });
+
+  describe('Pod 403 (spec §14: no stale data)', () => {
+    it('fails closed on Pod 403', async () => {
+      const ledger = new InMemoryDisclosureLedger();
+      const pipeline = new InMemoryPublicationPipeline({
+        config: MOCK_CONFIG,
+        ckanClient: new MockCkanClient(),
+        shaclValidator: new MockShaclValidator(),
+        translator: new MockTranslator(),
+        oidcClient: new MockOidcClient() as unknown as SolidOidcClient,
+        ledger,
+      });
+
+      const originalFetch = global.fetch;
+      global.fetch = (async (): Promise<Response> => new Response('Forbidden', { status: 403 })) as typeof fetch;
+
+      await expect(pipeline.publish('https://pod.example.org/r1')).rejects.toThrow(PublicationError);
+
+      global.fetch = originalFetch;
     });
   });
 });

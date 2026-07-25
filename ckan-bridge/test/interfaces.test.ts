@@ -47,6 +47,21 @@ describe('CKAN-01: interface contracts', () => {
         datastoreUpsert: async (): Promise<CkanActionResponse> => {
           return { action: 'datastore_upsert', success: true };
         },
+        datastoreSearch: async (): Promise<CkanActionResponse> => {
+          return { action: 'datastore_search', success: true };
+        },
+        organizationShow: async (): Promise<CkanActionResponse> => {
+          return { action: 'organization_show', success: true };
+        },
+        organizationCreate: async (): Promise<CkanActionResponse> => {
+          return { action: 'organization_create', success: true };
+        },
+        userShow: async (): Promise<CkanActionResponse> => {
+          return { action: 'user_show', success: true };
+        },
+        activityDataList: async (): Promise<CkanActionResponse> => {
+          return { action: 'activity_data_list', success: true };
+        },
       };
       expect(mockClient).toBeDefined();
     });
@@ -79,6 +94,14 @@ describe('CKAN-01: interface contracts', () => {
             conforms: true,
             violations: [],
             shapeIri: 'https://dev.linkeddata.au/def/solid-databox-compliance#PublicationShape',
+            validatedAt: new Date().toISOString(),
+          };
+        },
+        validateContent: async (rdfContent: string, contentType: string, shapeIri: string): Promise<ShaclValidationResult> => {
+          return {
+            conforms: true,
+            violations: [],
+            shapeIri,
             validatedAt: new Date().toISOString(),
           };
         },
@@ -162,8 +185,11 @@ describe('CKAN-01: interface contracts', () => {
   describe('CorrectionPropagator', () => {
     it('defines the correction propagation contract', () => {
       const mockPropagator: CorrectionPropagator = {
-        propagate: async (job: CorrectionPropagationJob): Promise<void> => {
-          // Mock implementation
+        propagate: async (job: CorrectionPropagationJob): Promise<CorrectionPropagationJob> => {
+          return job;
+        },
+        getJobStatus: async (idempotencyKey: string): Promise<CorrectionPropagationJob | undefined> => {
+          return undefined;
         },
       };
       expect(mockPropagator).toBeDefined();

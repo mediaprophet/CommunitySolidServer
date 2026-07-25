@@ -116,4 +116,29 @@ export class HttpCkanActionClient implements CkanActionClient {
   async datastoreUpsert(resourceId: string, records: unknown[], method: 'insert' | 'update' | 'upsert' = 'upsert'): Promise<CkanActionResponse> {
     return this.call({ action: 'datastore_upsert', data: { resource_id: resourceId, records, method } });
   }
+
+  async datastoreSearch(resourceId: string, limit?: number, offset?: number): Promise<CkanActionResponse> {
+    const data: Record<string, unknown> = { resource_id: resourceId };
+    if (limit !== undefined) { data.limit = limit; }
+    if (offset !== undefined) { data.offset = offset; }
+    return this.call({ action: 'datastore_search', data });
+  }
+
+  async organizationShow(id: string): Promise<CkanActionResponse> {
+    return this.call({ action: 'organization_show', data: { id } });
+  }
+
+  async organizationCreate(data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse> {
+    return this.call({ action: 'organization_create', data });
+  }
+
+  async userShow(id: string): Promise<CkanActionResponse> {
+    return this.call({ action: 'user_show', data: { id } });
+  }
+
+  async activityDataList(id: string, limit?: number): Promise<CkanActionResponse> {
+    const data: Record<string, unknown> = { id };
+    if (limit !== undefined) { data.limit = limit; }
+    return this.call({ action: 'activity_data_list', data });
+  }
 }

@@ -186,4 +186,129 @@ describe('CKAN-06: CKAN Action API client', () => {
       // No error means success
     });
   });
+
+  describe('datastore_search (spec §5.2)', () => {
+    it('calls datastore_search with resource_id', async () => {
+      let capturedUrl: string | undefined;
+      let capturedBody: string | undefined;
+      global.fetch = (async (url: string | URL | Request, init?: RequestInit): Promise<Response> => {
+        capturedUrl = typeof url === 'string' ? url : url.toString();
+        capturedBody = init?.body as string;
+        return new Response(JSON.stringify({
+          action: 'datastore_search', success: true,
+          result: { records: [{ a: 1 }] },
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      const result = await client.datastoreSearch('res-001');
+      expect(result.success).toBe(true);
+      expect(capturedUrl).toContain('datastore_search');
+      expect(capturedBody).toContain('res-001');
+    });
+
+    it('passes limit and offset', async () => {
+      let capturedBody: string | undefined;
+      global.fetch = (async (_url: string | URL | Request, init?: RequestInit): Promise<Response> => {
+        capturedBody = init?.body as string;
+        return new Response(JSON.stringify({ action: 'datastore_search', success: true, result: {} }), {
+          status: 200, headers: { 'Content-Type': 'application/json' },
+        });
+      }) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      await client.datastoreSearch('res-001', 50, 100);
+      expect(capturedBody).toContain('"limit":50');
+      expect(capturedBody).toContain('"offset":100');
+    });
+  });
+
+  describe('organization_show (spec §5.2)', () => {
+    it('calls organization_show', async () => {
+      global.fetch = (async (): Promise<Response> => new Response(JSON.stringify({
+        action: 'organization_show', success: true,
+        result: { id: 'org-001', name: 'gov-agency', title: 'Gov Agency' },
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } })) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      const result = await client.organizationShow('gov-agency');
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('organization_create (spec §5.2)', () => {
+    it('calls organization_create', async () => {
+      global.fetch = (async (): Promise<Response> => new Response(JSON.stringify({
+        action: 'organization_create', success: true,
+        result: { id: 'org-002', name: 'new-org' },
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } })) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      const result = await client.organizationCreate({ name: 'new-org', title: 'New Org' });
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('user_show (spec §5.2)', () => {
+    it('calls user_show to verify bridge service token identity', async () => {
+      global.fetch = (async (): Promise<Response> => new Response(JSON.stringify({
+        action: 'user_show', success: true,
+        result: { id: 'bridge-svc', name: 'bridge-svc' },
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } })) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      const result = await client.userShow('bridge-svc');
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('activity_data_list (spec §5.2)', () => {
+    it('calls activity_data_list for audit trail', async () => {
+      global.fetch = (async (): Promise<Response> => new Response(JSON.stringify({
+        action: 'activity_data_list', success: true,
+        result: [{ id: 'act-001', activity_type: 'changed dataset' }],
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } })) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      const result = await client.activityDataList('ckan-001', 10);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('CKAN API token expiry (spec §14)', () => {
+    it('fails closed on 401 — does not fall back to unauthenticated', async () => {
+      global.fetch = (async (): Promise<Response> => new Response('Unauthorized', { status: 401 })) as typeof fetch;
+
+      const client = new HttpCkanActionClient({
+        ckanBaseUrl: 'https://ckan.example.org/',
+        ckanApiTokenFile: TMP_TOKEN,
+      });
+
+      await expect(client.packageShow('test')).rejects.toThrow(CkanApiError);
+    });
+  });
 });
