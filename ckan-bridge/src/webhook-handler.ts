@@ -59,7 +59,10 @@ export class HmacWebhookHandler implements WebhookHandler {
     if (!this.callbacks.has(eventType)) {
       this.callbacks.set(eventType, []);
     }
-    this.callbacks.get(eventType)!.push(callback);
+    const callbacks = this.callbacks.get(eventType);
+    if (callbacks) {
+      callbacks.push(callback);
+    }
   }
 
   /** Compute the expected HMAC-SHA256 signature for a body. */

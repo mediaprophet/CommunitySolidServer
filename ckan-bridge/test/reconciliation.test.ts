@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { InMemoryReconciliationService } from '../src/reconciliation.js';
 import { InMemoryDisclosureLedger } from '../src/bridge-service.js';
 import type { PublicationJob } from '../src/types.js';

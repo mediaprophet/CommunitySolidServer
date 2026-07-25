@@ -11,7 +11,7 @@ import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { writeFileSync, unlinkSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { generateKeyPairSync, createHash } from 'node:crypto';
+import { generateKeyPairSync } from 'node:crypto';
 import { CkanBridgeServiceImpl, InMemoryDisclosureLedger } from '../src/bridge-service.js';
 import type { BridgeConfig } from '../src/types.js';
 
@@ -81,7 +81,7 @@ describe('CKAN-16: End-to-end integration', () => {
       const originalFetch = global.fetch;
 
       // Mock fetch for both OIDC discovery + token, and Pod read
-      global.fetch = (async (url: string | URL | Request, init?: RequestInit): Promise<Response> => {
+      global.fetch = (async (url: string | URL | Request, _init?: RequestInit): Promise<Response> => {
         const urlStr = typeof url === 'string' ? url : url.toString();
 
         // OIDC discovery
@@ -180,8 +180,6 @@ describe('CKAN-16: End-to-end integration', () => {
     it('records all events in the ledger', async () => {
       const ledger = new InMemoryDisclosureLedger();
 
-      // Simulate a publication
-      const { InMemoryPublicationPipeline } = await import('../src/publication-pipeline.js');
       // The ledger should record publications, corrections, and anonymisations
       expect(ledger.publications).toHaveLength(0);
       expect(ledger.corrections).toHaveLength(0);

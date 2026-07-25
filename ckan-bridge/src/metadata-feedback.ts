@@ -12,7 +12,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import type { MetadataFeedback, DisclosureLedger, ReconciliationService } from './interfaces.js';
+import type { MetadataFeedback, DisclosureLedger } from './interfaces.js';
 import type { ReconciliationDrift } from './types.js';
 import type { SolidOidcClient } from './solid-oidc-client.js';
 
@@ -90,22 +90,11 @@ export class PodMetadataFeedback implements MetadataFeedback {
     const containerIri = PodMetadataFeedback.feedbackContainerIri(entry.podResourceIri);
 
     try {
-      const token = await this.oidcClient.getAccessToken(containerIri);
-      const proof = this.oidcClient.generateRequestProof('POST', containerIri, token.token);
+      // Authenticate to the Pod for the feedback container
+      await this.oidcClient.getAccessToken(containerIri);
 
-      // In production, this would be a real HTTP POST
-      // For the reference implementation, we record it in the ledger
-      /*
-      await fetch(containerIri, {
-        method: 'POST',
-        headers: {
-          'Authorization': `DPoP ${token.token}`,
-          'DPoP': proof,
-          'Content-Type': 'application/ld+json',
-        },
-        body: JSON.stringify(signedEntry),
-      });
-      */
+      // In production, this would POST the signed entry to the Pod's feedback container.
+      // The reference implementation records it in the disclosure ledger below.
     } catch {
       throw new MetadataFeedbackError('Failed to write feedback to Pod', 'POD_WRITE_FAILED');
     }

@@ -3,7 +3,7 @@ import { writeFileSync, unlinkSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { generateKeyPairSync } from 'node:crypto';
-import { PodMetadataFeedback, MetadataFeedbackError } from '../src/metadata-feedback.js';
+import { PodMetadataFeedback } from '../src/metadata-feedback.js';
 import { InMemoryDisclosureLedger } from '../src/bridge-service.js';
 import { SolidOidcClient } from '../src/solid-oidc-client.js';
 import type { ReconciliationDrift } from '../src/types.js';

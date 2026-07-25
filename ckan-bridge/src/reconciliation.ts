@@ -76,12 +76,16 @@ export class InMemoryReconciliationService implements ReconciliationService {
   async sweep(): Promise<readonly ReconciliationDrift[]> {
     const drifts: ReconciliationDrift[] = [];
     const jobs = this.getJobs();
-    const publishedJobs = jobs.filter(j => j.status === 'published' && j.ckanDatasetId);
+    const publishedJobs = jobs.filter(
+      (j): j is PublicationJob & { ckanDatasetId: string } =>
+        j.status === 'published' && j.ckanDatasetId !== undefined,
+    );
 
     // For each published job, check if CKAN still has the dataset
     for (const job of publishedJobs) {
+      const ckanDatasetId = job.ckanDatasetId;
       try {
-        const ckanResult = await this.ckanClient.packageShow(job.ckanDatasetId!);
+        const ckanResult = await this.ckanClient.packageShow(ckanDatasetId);
         const ckanDataset = ckanResult.result;
 
         if (!ckanDataset) {
@@ -89,7 +93,7 @@ export class InMemoryReconciliationService implements ReconciliationService {
           drifts.push({
             type: 'orphaned-ckan',
             podResourceIri: job.podResourceIri,
-            ckanDatasetId: job.ckanDatasetId!,
+            ckanDatasetId,
             driftedFields: [],
             detectedAt: new Date().toISOString(),
           });
@@ -103,7 +107,7 @@ export class InMemoryReconciliationService implements ReconciliationService {
           drifts.push({
             type: 'editor-originated',
             podResourceIri: job.podResourceIri,
-            ckanDatasetId: job.ckanDatasetId!,
+            ckanDatasetId,
             driftedFields: ['databox_provenance_iri'],
             detectedAt: new Date().toISOString(),
           });
@@ -114,7 +118,7 @@ export class InMemoryReconciliationService implements ReconciliationService {
         drifts.push({
           type: 'orphaned-ckan',
           podResourceIri: job.podResourceIri,
-          ckanDatasetId: job.ckanDatasetId!,
+          ckanDatasetId,
           driftedFields: [],
           detectedAt: new Date().toISOString(),
         });

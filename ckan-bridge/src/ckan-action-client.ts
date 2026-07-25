@@ -14,7 +14,6 @@ import type {
 import type {
   CkanActionClient,
   CkanPackage,
-  CkanResource,
 } from './interfaces.js';
 
 /** Error thrown when the CKAN API client fails. */

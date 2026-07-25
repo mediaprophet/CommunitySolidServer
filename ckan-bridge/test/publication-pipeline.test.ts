@@ -1,9 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
-import { createHash } from 'node:crypto';
 import { InMemoryPublicationPipeline, PublicationError } from '../src/publication-pipeline.js';
 import { InMemoryDisclosureLedger } from '../src/bridge-service.js';
-import type { BridgeConfig, PublicationJob } from '../src/types.js';
-import type { CkanActionClient, CkanPackage, ShaclValidator, RdfTranslator, DisclosureLedger } from '../src/interfaces.js';
+import type { BridgeConfig } from '../src/types.js';
+import type { CkanActionClient, CkanPackage, ShaclValidator, RdfTranslator } from '../src/interfaces.js';
 import type { ShaclValidationResult, TranslationResult, CkanActionResponse } from '../src/types.js';
 import type { SolidOidcClient, CachedToken } from '../src/solid-oidc-client.js';
 
@@ -34,43 +33,43 @@ class MockCkanClient implements CkanActionClient {
   async packageCreate(data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse<CkanPackage>> {
     return { action: 'package_create', success: true, result: { id: 'ckan-new', name: data.name as string, title: data.title as string } };
   }
-  async packageUpdate(id: string, data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse<CkanPackage>> {
+  async packageUpdate(id: string, _data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse<CkanPackage>> {
     return { action: 'package_update', success: true, result: { id, name: 'test', title: 'Test' } };
   }
-  async datastoreCreate(resourceId: string, fields: unknown[], records: unknown[]): Promise<CkanActionResponse> {
+  async datastoreCreate(_resourceId: string, _fields: unknown[], _records: unknown[]): Promise<CkanActionResponse> {
     return { action: 'datastore_create', success: true };
   }
-  async datastoreUpsert(resourceId: string, records: unknown[], method?: string): Promise<CkanActionResponse> {
+  async datastoreUpsert(_resourceId: string, _records: unknown[], _method?: string): Promise<CkanActionResponse> {
     return { action: 'datastore_upsert', success: true };
   }
-  async datastoreSearch(resourceId: string, limit?: number, offset?: number): Promise<CkanActionResponse> {
+  async datastoreSearch(_resourceId: string, _limit?: number, _offset?: number): Promise<CkanActionResponse> {
     return { action: 'datastore_search', success: true };
   }
-  async organizationShow(id: string): Promise<CkanActionResponse> {
+  async organizationShow(_id: string): Promise<CkanActionResponse> {
     return { action: 'organization_show', success: true };
   }
-  async organizationCreate(data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse> {
+  async organizationCreate(_data: Readonly<Record<string, unknown>>): Promise<CkanActionResponse> {
     return { action: 'organization_create', success: true };
   }
-  async userShow(id: string): Promise<CkanActionResponse> {
+  async userShow(_id: string): Promise<CkanActionResponse> {
     return { action: 'user_show', success: true };
   }
-  async activityDataList(id: string, limit?: number): Promise<CkanActionResponse> {
+  async activityDataList(_id: string, _limit?: number): Promise<CkanActionResponse> {
     return { action: 'activity_data_list', success: true };
   }
 }
 
 class MockShaclValidator implements ShaclValidator {
-  async validate(podResourceIri: string): Promise<ShaclValidationResult> {
+  async validate(_podResourceIri: string): Promise<ShaclValidationResult> {
     return { conforms: true, violations: [], shapeIri: 'mock', validatedAt: new Date().toISOString() };
   }
-  async validateContent(rdfContent: string, contentType: string, shapeIri: string): Promise<ShaclValidationResult> {
+  async validateContent(_rdfContent: string, _contentType: string, shapeIri: string): Promise<ShaclValidationResult> {
     return { conforms: true, violations: [], shapeIri, validatedAt: new Date().toISOString() };
   }
 }
 
 class MockTranslator implements RdfTranslator {
-  async translate(podResourceIri: string): Promise<TranslationResult> {
+  async translate(_podResourceIri: string): Promise<TranslationResult> {
     return { records: [{ a: 1 }], fields: [{ id: 'a', type: 'numeric' }], anonymised: false, anonymisationDecisions: [] };
   }
 }
@@ -79,7 +78,7 @@ class MockOidcClient {
   async getAccessToken(podIri: string): Promise<CachedToken> {
     return { token: 'mock-token', expiresAt: Date.now() + 300000, dpopProof: 'mock-proof', audience: podIri };
   }
-  generateRequestProof(method: string, url: string, accessToken: string): string {
+  generateRequestProof(_method: string, _url: string, _accessToken: string): string {
     return 'mock-request-proof';
   }
 }

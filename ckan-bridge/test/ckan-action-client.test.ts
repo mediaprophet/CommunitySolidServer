@@ -166,8 +166,7 @@ describe('CKAN-06: CKAN Action API client', () => {
 
   describe('reloadToken', () => {
     it('reloads the token from file', async () => {
-      global.fetch = (async (_url: string | URL | Request, init?: RequestInit): Promise<Response> => {
-        const headers = init?.headers as Record<string, string>;
+      global.fetch = (async (_url: string | URL | Request, _init?: RequestInit): Promise<Response> => {
         return new Response(JSON.stringify({
           action: 'package_show', success: true,
           result: { id: 'test', name: 'test', title: 'Test' },

@@ -89,7 +89,7 @@ describe('CKAN-01: interface contracts', () => {
   describe('ShaclValidator', () => {
     it('defines the SHACL validation contract', () => {
       const mockValidator: ShaclValidator = {
-        validate: async (podResourceIri: string): Promise<ShaclValidationResult> => {
+        validate: async (_podResourceIri: string): Promise<ShaclValidationResult> => {
           return {
             conforms: true,
             violations: [],
@@ -97,7 +97,7 @@ describe('CKAN-01: interface contracts', () => {
             validatedAt: new Date().toISOString(),
           };
         },
-        validateContent: async (rdfContent: string, contentType: string, shapeIri: string): Promise<ShaclValidationResult> => {
+        validateContent: async (_rdfContent: string, _contentType: string, shapeIri: string): Promise<ShaclValidationResult> => {
           return {
             conforms: true,
             violations: [],
@@ -113,7 +113,7 @@ describe('CKAN-01: interface contracts', () => {
   describe('RdfTranslator', () => {
     it('defines the RDF→tabular translation contract', () => {
       const mockTranslator: RdfTranslator = {
-        translate: async (podResourceIri: string): Promise<TranslationResult> => {
+        translate: async (_podResourceIri: string): Promise<TranslationResult> => {
           return {
             records: [{ product: 'Test' }],
             fields: [{ id: 'product', type: 'text' }],
@@ -129,8 +129,8 @@ describe('CKAN-01: interface contracts', () => {
   describe('WebhookHandler', () => {
     it('defines the webhook handler contract', () => {
       const mockHandler: WebhookHandler = {
-        handle: async (event: CkanWebhookEvent, signature: string, rawBody: string): Promise<void> => {
-          // Mock implementation
+        handle: async (_event: CkanWebhookEvent, _signature: string, _rawBody: string): Promise<void> => {
+          void 0;
         },
       };
       expect(mockHandler).toBeDefined();
@@ -158,7 +158,7 @@ describe('CKAN-01: interface contracts', () => {
             retryCount: 0,
           };
         },
-        getJobStatus: async (key: string): Promise<PublicationJob | undefined> => undefined,
+        getJobStatus: async (_key: string): Promise<PublicationJob | undefined> => undefined,
         retry: async (key: string): Promise<PublicationJob> => {
           return {
             idempotencyKey: key,
@@ -188,7 +188,7 @@ describe('CKAN-01: interface contracts', () => {
         propagate: async (job: CorrectionPropagationJob): Promise<CorrectionPropagationJob> => {
           return job;
         },
-        getJobStatus: async (idempotencyKey: string): Promise<CorrectionPropagationJob | undefined> => {
+        getJobStatus: async (_idempotencyKey: string): Promise<CorrectionPropagationJob | undefined> => {
           return undefined;
         },
       };
@@ -200,8 +200,8 @@ describe('CKAN-01: interface contracts', () => {
     it('defines the reconciliation contract', () => {
       const mockReconciliation: ReconciliationService = {
         sweep: async (): Promise<readonly ReconciliationDrift[]> => [],
-        start: () => {},
-        stop: () => {},
+        start: () => { void 0; },
+        stop: () => { void 0; },
       };
       expect(mockReconciliation).toBeDefined();
     });
@@ -210,8 +210,8 @@ describe('CKAN-01: interface contracts', () => {
   describe('MetadataFeedback', () => {
     it('defines the metadata feedback contract', () => {
       const mockFeedback: MetadataFeedback = {
-        annotate: async (drift: ReconciliationDrift): Promise<void> => {
-          // Mock implementation
+        annotate: async (_drift: ReconciliationDrift): Promise<void> => {
+          void 0;
         },
       };
       expect(mockFeedback).toBeDefined();
@@ -221,9 +221,9 @@ describe('CKAN-01: interface contracts', () => {
   describe('DisclosureLedger', () => {
     it('defines the disclosure ledger contract', () => {
       const mockLedger: DisclosureLedger = {
-        recordPublication: async (job: PublicationJob): Promise<void> => {},
-        recordCorrection: async (job: CorrectionPropagationJob): Promise<void> => {},
-        recordAnonymisation: async (podResourceIri: string, decisions: readonly unknown[]): Promise<void> => {},
+        recordPublication: async (_job: PublicationJob): Promise<void> => { void 0; },
+        recordCorrection: async (_job: CorrectionPropagationJob): Promise<void> => { void 0; },
+        recordAnonymisation: async (_podResourceIri: string, _decisions: readonly unknown[]): Promise<void> => { void 0; },
       };
       expect(mockLedger).toBeDefined();
     });
@@ -249,8 +249,8 @@ describe('CKAN-01: interface contracts', () => {
       };
       const mockService: CkanBridgeService = {
         config,
-        start: async () => {},
-        stop: async () => {},
+        start: async () => { void 0; },
+        stop: async () => { void 0; },
       };
       expect(mockService.config.ckanBaseUrl).toBe('https://ckan.example.org/');
     });

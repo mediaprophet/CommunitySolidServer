@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { InMemoryCorrectionPropagator, CorrectionPropagationError } from '../src/correction-propagator.js';
+import { InMemoryCorrectionPropagator } from '../src/correction-propagator.js';
 import { InMemoryDisclosureLedger } from '../src/bridge-service.js';
 import type { CorrectionPropagationJob, CorrectionDisposition, RecipientNotificationDuty } from '../src/types.js';
 
@@ -180,7 +180,7 @@ describe('CKAN-12: Correction propagation', () => {
       const key = InMemoryCorrectionPropagator.idempotencyKey(job.podRecordIri, job.disposition, job.dispositionAt);
       const found = await propagator.getJobStatus(key);
       expect(found).toBeDefined();
-      expect(found!.disposition).toBe('corrected');
+      expect(found?.disposition).toBe('corrected');
     });
   });
 

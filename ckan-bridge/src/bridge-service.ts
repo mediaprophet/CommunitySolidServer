@@ -136,15 +136,15 @@ export class CkanBridgeServiceImpl implements CkanBridgeService {
     });
 
     // Register webhook callbacks
-    this.webhookHandler.on('dataset_created', async (event) => {
+    this.webhookHandler.on('dataset_created', async (_event) => {
       // Trigger reconciliation check for new CKAN datasets
       // Implemented in CKAN-13
     });
-    this.webhookHandler.on('dataset_updated', async (event) => {
+    this.webhookHandler.on('dataset_updated', async (_event) => {
       // Check for editor-originated drift
       // Implemented in CKAN-13
     });
-    this.webhookHandler.on('dataset_deleted', async (event) => {
+    this.webhookHandler.on('dataset_deleted', async (_event) => {
       // Clean up orphaned references
       // Implemented in CKAN-13
     });

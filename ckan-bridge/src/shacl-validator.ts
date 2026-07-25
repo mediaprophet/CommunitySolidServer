@@ -64,7 +64,7 @@ export class FileShaclValidator implements ShaclValidator {
    * For now, this provides the structure and fail-closed semantics.
    * The actual RDF fetching is injected by the publication pipeline (CKAN-10).
    */
-  async validate(podResourceIri: string): Promise<ShaclValidationResult> {
+  async validate(_podResourceIri: string): Promise<ShaclValidationResult> {
     this.loadShapes();
 
     // In production, this would:

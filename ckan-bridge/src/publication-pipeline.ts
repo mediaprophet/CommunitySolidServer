@@ -14,8 +14,6 @@
 import { createHash } from 'node:crypto';
 import type {
   PublicationJob,
-  PublicationJobStatus,
-  CkanDatasetMetadata,
   BridgeConfig,
 } from './types.js';
 import type { PublicationPipeline, DisclosureLedger } from './interfaces.js';

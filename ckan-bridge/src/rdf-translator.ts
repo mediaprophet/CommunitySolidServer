@@ -78,7 +78,7 @@ export class ProgramProfileRdfTranslator implements RdfTranslator {
    * In the reference implementation, this provides the structure and anonymisation
    * logic. The actual RDF parsing is injected by the publication pipeline (CKAN-10).
    */
-  async translate(podResourceIri: string): Promise<TranslationResult> {
+  async translate(_podResourceIri: string): Promise<TranslationResult> {
     // In production:
     // 1. Fetch RDF from podResourceIri using SolidOidcClient
     // 2. Parse with n3.Parser
@@ -109,7 +109,7 @@ export class ProgramProfileRdfTranslator implements RdfTranslator {
    * This allows the publication pipeline to pass in the parsed data.
    */
   async translateQuads(
-    quads: ReadonlyArray<{ subject: string; predicate: string; object: string }>,
+    quads: readonly { subject: string; predicate: string; object: string }[],
   ): Promise<TranslationResult> {
     const decisions: AnonymisationDecision[] = [];
     const fieldMap = new Map(this.config.fieldMappings.map(m => [m.propertyUri, m]));
@@ -121,11 +121,17 @@ export class ProgramProfileRdfTranslator implements RdfTranslator {
       if (!subjects.has(quad.subject)) {
         subjects.set(quad.subject, new Map());
       }
-      const props = subjects.get(quad.subject)!;
+      const props = subjects.get(quad.subject);
+      if (!props) {
+        continue;
+      }
       if (!props.has(quad.predicate)) {
         props.set(quad.predicate, []);
       }
-      props.get(quad.predicate)!.push(quad.object);
+      const values = props.get(quad.predicate);
+      if (values) {
+        values.push(quad.object);
+      }
     }
 
     // Translate each subject to a row
@@ -157,7 +163,7 @@ export class ProgramProfileRdfTranslator implements RdfTranslator {
             row[mapping.ckanFieldId] = hashed.length === 1 ? hashed[0] : hashed;
           } else if (anonRule.action === 'generalised') {
             // Generalise: take only the first character or bucket
-            const generalised = values.map(v => v.charAt(0) + '***');
+            const generalised = values.map(v => `${v.charAt(0)}***`);
             row[mapping.ckanFieldId] = generalised.length === 1 ? generalised[0] : generalised;
           }
         } else {
