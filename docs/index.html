@@ -369,6 +369,62 @@
       </div>
     </section>
 
+    <!-- CKAN Bridge Section -->
+    <section class="info-card reveal">
+      <h3 style="color: var(--text-accent);">CKAN Bridge — Pod→CKAN Publication Pipeline</h3>
+      <p style="margin-bottom: 2rem;">An opt-in microservice that publishes governed Solid Pod data to a CKAN open-data portal. The bridge reads from Pods via Solid-OIDC, validates with SHACL, translates RDF to tabular form, and publishes via the CKAN Action API — with idempotent retries, reconciliation drift detection, and correction propagation.</p>
+
+      <div class="grid-2">
+        <div>
+          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">Bridge Microservice (TypeScript)</h4>
+          <ul class="feature-list">
+            <li><strong>Solid-OIDC Client:</strong> DPoP-bound access tokens for reading Pods; short-lived, cached, fail-closed on expiry.</li>
+            <li><strong>CKAN Action API Client:</strong> HTTP-only RPC client (<code>package_show</code>, <code>package_create</code>, <code>package_update</code>, <code>datastore_create/upsert/search</code>, <code>organization_show/create</code>, <code>user_show</code>, <code>activity_data_list</code>).</li>
+            <li><strong>SHACL Validator:</strong> Fail-closed validation before any data reaches CKAN; non-compliant data is quarantined.</li>
+            <li><strong>RDF→Tabular Translator:</strong> Program-profile-driven field mapping with PII anonymisation (stripped, hashed, generalised) and evidence recording.</li>
+            <li><strong>Publication Pipeline:</strong> Idempotent via <code>sha256(podIri:contentDigest)</code>; bounded retries with quarantine on max-retries-exceeded.</li>
+            <li><strong>Webhook Handler:</strong> HMAC-SHA256 signature verification, idempotent event deduplication, routes <code>dataset_created/updated/deleted</code> events.</li>
+            <li><strong>Reconciliation &amp; Drift Detection:</strong> Periodic sweeps compare Pod state with CKAN state; detects editor-originated drift and orphaned CKAN datasets.</li>
+            <li><strong>Correction Propagation:</strong> Propagates Databox review dispositions (corrected, statement-associated, partially-corrected, etc.) to CKAN datasets with per-recipient notification duties.</li>
+            <li><strong>Metadata Feedback:</strong> Writes append-only feedback entries back to the Pod when CKAN metadata changes.</li>
+            <li><strong>Disclosure Ledger:</strong> Append-only evidence chain recording every publication, correction, and anonymisation event.</li>
+            <li><strong>HTTP Endpoints:</strong> <code>/health</code>, <code>/publish</code>, <code>/webhook</code>.</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">CKAN Plugin (Python)</h4>
+          <ul class="feature-list">
+            <li><strong>Thin Plugin:</strong> <code>ckanext-databox-bridge</code> — no business logic, no RDF parsing, no Solid auth. All heavy lifting is in the bridge microservice.</li>
+            <li><strong>Webhook Emission:</strong> Emits HMAC-signed webhooks on dataset lifecycle events (created, updated, deleted) to the bridge.</li>
+            <li><strong>Custom Action API:</strong> <code>ckan_bridge_status</code> (public read-only) and <code>ckan_bridge_sync</code> (service-token-only) for callback synchronisation.</li>
+            <li><strong>Dataset Schema Extensions:</strong> Adds <code>databox_provenance_iri</code>, <code>databox_policy_iri</code>, <code>databox_shacl_shape_iri</code>, <code>databox_consent_receipt_iri</code> fields to CKAN dataset schemas.</li>
+            <li><strong>Write Access Control:</strong> Bridge service API token is the only authorised writer; public users get read-only.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 2rem;">
+        <div>
+          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">Testing</h4>
+          <ul class="feature-list">
+            <li><strong>197 unit tests</strong> across 18 test suites — 92.5% statement coverage.</li>
+            <li><strong>Adversarial security tests:</strong> HMAC replay, signature forgery, token expiry fail-closed, DPoP key load failure.</li>
+            <li><strong>Conformance tests:</strong> SHACL fail-closed, idempotency dedup, max-retries quarantine, Pod 403 fail-closed.</li>
+            <li><strong>E2E integration test:</strong> Full Pod→SHACL→translate→CKAN publish→ledger flow.</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">Deployment</h4>
+          <ul class="feature-list">
+            <li><strong>Kubernetes:</strong> Deployment, Service, ConfigMap, NetworkPolicies, Kustomize manifests included.</li>
+            <li><strong>Secrets:</strong> CKAN API token, DPoP key, webhook secret mounted from Kubernetes Secrets — never inlined.</li>
+            <li><strong>Config:</strong> SHACL shapes and program profile mounted from ConfigMaps.</li>
+            <li><strong>Strict ESLint:</strong> TypeScript strict + stylistic presets; zero lint errors.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <!-- Testing & Deployment Section -->
     <section class="info-card reveal">
       <h3 style="color: var(--text-accent);">Testing &amp; Deployment</h3>
