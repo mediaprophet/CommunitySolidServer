@@ -23,6 +23,7 @@ const baseSections = [
       { to: "/ipms/modules", labelKey: "nav.modules" },
       { to: "/hosting", labelKey: "nav.hosting" },
       { to: "/governance", labelKey: "nav.governance" },
+      { to: "/agency-structure", labelKey: "Agency Structure" },
       { to: "/credentials", labelKey: "nav.credentials" },
       { to: "/members", labelKey: "nav.members" },
       { to: "/operations", labelKey: "nav.operations" },

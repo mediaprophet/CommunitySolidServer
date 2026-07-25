@@ -21,6 +21,7 @@ import { WaiterOrdersPage } from "./pages/waiter";
 import { CustomerSelfOrderPage } from "./pages/pos/customer";
 import { PromotionDisplayPage } from "./pages/pos/display";
 import { GovernancePage } from "./pages/governance";
+import { AgencyStructurePage } from "./pages/agency-structure";
 import { CredentialsPage } from "./pages/credentials";
 import { MembersPage } from "./pages/members";
 import { OperationsPage } from "./pages/operations";
@@ -109,6 +110,10 @@ function App() {
             create: "/governance",
           },
           {
+            name: "agency-structure",
+            list: "/agency-structure",
+          },
+          {
             name: "credentials",
             create: "/credentials",
           },
@@ -165,6 +170,7 @@ function App() {
             <Route path="/website-maker" element={<WebsiteMakerPage />} />
             <Route path="/hosting" element={<HostingPage />} />
             <Route path="/governance" element={<GovernancePage />} />
+            <Route path="/agency-structure" element={<AgencyStructurePage />} />
             <Route path="/credentials" element={<CredentialsPage />} />
             <Route path="/members" element={<MembersPage />} />
             <Route path="/operations" element={<OperationsPage />} />
