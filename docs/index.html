@@ -369,53 +369,6 @@
       </div>
     </section>
 
-    <!-- Federated Open Data & CKAN Section -->
-    <section class="info-card reveal">
-      <h3 style="color: var(--text-accent);">Federated Open Data Integration — CKAN &amp; Geospatial Adapters</h3>
-      <p style="margin-bottom: 2rem;">The Databox engine includes a consent-gated geospatial adapter framework that connects to <strong>40+ federated CKAN open-data portals</strong> worldwide, alongside ~90 curated endpoints spanning astronomy, Earth observation, planetary mapping, and government data. Every outbound request is gated by the <code>NetworkDisclosureRegistry</code> — no data leaves the engine without explicit, per-adapter egress consent.</p>
-
-      <div class="grid-2">
-        <div>
-          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">CKAN Federated Portal Adapter</h4>
-          <ul class="feature-list">
-            <li><strong>Spatial Dataset Discovery:</strong> Queries the CKAN <code>package_search</code> API with bounding-box filters (<code>ext_bbox</code>) to discover datasets overlapping any geographic region.</li>
-            <li><strong>Metadata Extraction:</strong> Parses dataset title, license, creation date, resource format, and resource URL from CKAN JSON responses — ready for ingestion into the provenance graph.</li>
-            <li><strong>Consent-Gated Egress:</strong> Every CKAN query is checked against the <code>NetworkDisclosureRegistry</code>. If consent is not registered for a given adapter and endpoint, the request is rejected before any network call.</li>
-            <li><strong>Provenance Quins:</strong> Discovered datasets are converted to <code>NQuin</code> semantic triples with <code>dcterms:title</code>, <code>dcterms:license</code>, <code>dcterms:created</code>, and <code>dcterms:source</code> — queryable in the graph engine.</li>
-          </ul>
-        </div>
-        <div>
-          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">40+ Registered CKAN Portals</h4>
-          <ul class="feature-list">
-            <li><strong>National Portals (15):</strong> USA (data.gov), UK (data.gov.uk), Australia (data.gov.au), Canada (open.canada.ca), Brazil (dados.gov.br), Singapore, Ireland, Germany (GovData), Croatia, Romania, Finland, Denmark, Austria, Sweden, Mexico.</li>
-            <li><strong>Regional &amp; State Portals (8):</strong> Queensland, South Australia, NSW, California, Northern Ireland, Aragon (Spain), Asturias (Spain), Helsinki.</li>
-            <li><strong>Municipal Portals (7):</strong> Boston, Amsterdam, Berlin, Cape Town, Malmo, Brisbane, Bari.</li>
-            <li><strong>Supranational (3):</strong> EU Data Portal (data.europa.eu), UN OCHA Humanitarian Data Exchange (HDX), OpenAfrica.</li>
-            <li><strong>Australian Geoscape Bulk Data:</strong> Administrative boundaries, G-NAF geocoded address file, and federal electoral boundaries — all via data.gov.au CKAN API.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top: 2rem;">
-        <div>
-          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">Broader Geospatial Adapter Ecosystem</h4>
-          <ul class="feature-list">
-            <li><strong>12 Adapter Types:</strong> CKAN, OGC WMS/WFS, STAC (SpatioTemporal Asset Catalog), OPeNDAP, 3D Tiles, OpenStreetMap Overpass, GBIF Biodiversity, SPARQL/Wikidata, IVOA TAP (astronomy), DEM (elevation), and generic REST/Astrometry.</li>
-            <li><strong>~90 Curated Endpoints:</strong> Pre-registered in <code>canvas_defaults.rs</code> — spanning NASA GIBS, USGS Astrogeology (Mars/Moon/Venus/Mercury), ESA Gaia DR3, SIMBAD, VizieR, Chandra, ABS statistical boundaries, Geoscience Australia WMS/WFS, and state spatial portals (NSW, VIC, QLD, SA).</li>
-          </ul>
-        </div>
-        <div>
-          <h4 style="color: var(--text-accent); font-size: 1.25rem; margin-bottom: 1rem;">How It Works</h4>
-          <ul class="feature-list">
-            <li><strong>1. Register Consent:</strong> The organisation registers egress consent for a specific adapter and endpoint in the <code>NetworkDisclosureRegistry</code>, declaring the purpose and trigger.</li>
-            <li><strong>2. Build Request:</strong> The adapter constructs a standards-compliant query (e.g. CKAN <code>package_search</code> with <code>ext_bbox</code> for spatial search, or IVOA TAP/ADQL <code>CONTAINS(POINT, POLYGON)</code> for astronomical cone searches).</li>
-            <li><strong>3. Parse Response:</strong> The adapter converts the response into provenance <code>NQuin</code> triples — one stable subject per feature, with standard Dublin Core and WGS84 geo predicates.</li>
-            <li><strong>4. Route to Graph:</strong> Parsed quins are routed to the live daemon graph and Chora download pipeline for further processing, deduplication, and spatial indexing.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- Testing & Deployment Section -->
     <section class="info-card reveal">
       <h3 style="color: var(--text-accent);">Testing &amp; Deployment</h3>
