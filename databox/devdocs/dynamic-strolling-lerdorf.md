@@ -134,14 +134,14 @@ hand-waving):
   the IPMS's *operational definition* — governance rules (ODRL/DPV), **module definitions/manifests**, workflows,
   access policies (WAC/ACP), RDF-driven views, vocab (OWL/SHACL) — is **declarative RDF**; CSS/Node is *one thin
   interpreter* over it. So the portable unit is the **RDF "works"** (the org's whole operational definition +
-  data), which **import into a different Solid server** — OpenLink Virtuoso, a future **QualiaDB** — that
-  supplies its **own interpreter + adapters** (the "bit of additional code" per environment). **Honest
+  data), which **import into a different Solid server** — OpenLink Virtuoso, or any other Solid-protocol-conformant
+  server — that supplies its **own interpreter + adapters** (the "bit of additional code" per environment). **Honest
   spectrum:** *declarable* (data, vocab, ODRL/DPV rules, SHACL, manifests, access policy, RDF views/workflows)
   migrates **as data**; *irreducibly imperative* — (a) **the interpreter engine itself** (something must read
   the ODRL / run the workflow / dispatch modules), (b) **external integrations** (payments / Cloudflare / device
   mTLS / crypto / transport) — is **re-implemented per runtime**. **Not zero-code migration:** the *works* move,
-  the *engine* is adapted. On CSS the engine is Components.js/TS; on QualiaDB, its own. This designs Timothy's
-  **own** CSS→QualiaDB off-ramp, not a hypothetical.
+  the *engine* is adapted. On CSS the engine is Components.js/TS; on another Solid server, its own. This designs
+  Timothy's **own** CSS off-ramp, not a hypothetical.
 - **Interface = Solid-protocol conformance ("vanilla") — NOT a new contract.** The interoperability requirement
   is **conformance to the Solid protocols** (LDP / Solid Protocol / WAC-ACP / Solid-OIDC / Notifications /
   Type-Index) — the **vanilla** substrate the app targets; any conformant server hosts the works. The works
@@ -185,7 +185,7 @@ needs to bring that in. "You can arrive" as cleanly as "you can leave."
   §5.5, *via the mapper* — what was asked for) vs an **auth IdP** (federated login — a *separate* OIDC/SAML
   bridge, not the mapper).
 - **Relevance:** mostly the **enterprise / powerful-server** end (real AD/SQL estates — same end that wants K8s
-  and OpenLink/QualiaDB), less the corner shop. Decision #30.
+  and OpenLink Virtuoso), less the corner shop. Decision #30.
 
 ### 1.6 Data layer — internal Solid pods over a swappable engine (Oxigraph, native + WASM)
 
@@ -198,7 +198,7 @@ choice** — which is the no-lock-in principle (§1.4) applied to storage.
   (migration = standard pod export/import, §1.4). It was never "SPARQL DB *vs* pods" — it's **pods, always,
   over a chosen engine**.
 - **Engine (swappable, *under* the pods):** file (holds RDF + binary; simple shop-box default) → **Oxigraph**
-  (SPARQL 1.1, Rust; MIT/Apache) → Virtuoso / QualiaDB (enterprise). **Oxigraph is a Rust crate → compiled
+  (SPARQL 1.1, Rust; MIT/Apache) → Virtuoso (enterprise). **Oxigraph is a Rust crate → compiled
   *into* the Rust native-edge loader (§1.2)** — no new runtime: the loader becomes supervise + devices +
   connectors + **the durable triplestore** (RocksDB), exposing a **localhost SPARQL endpoint** that CSS's
   *existing* `SparqlDataAccessor` uses as backend (`--sparqlEndpoint`). The loader also supervises CSS as a
@@ -227,7 +227,7 @@ choice** — which is the no-lock-in principle (§1.4) applied to storage.
   can't hold STL / images / PDFs). File-backend holds both (shop-box); hybrid (Oxigraph + blob store) for the
   query-powered path.
 - **Deployment:** shop-box = **one loader binary** (supervise + Oxigraph + connectors) + managed CSS child =
-  near-zero ops. K8s = Oxigraph as a native container/sidecar (RocksDB volume) or swap to Virtuoso/QualiaDB.
+  near-zero ops. K8s = Oxigraph as a native container/sidecar (RocksDB volume) or swap to Virtuoso.
   Browser = WASM cache. The loader is deliberately substantial for the box (fewer moving parts), **decomposable
   at scale**.
 - **Phase-0 implication (§13):** the engine/backend is **foundational** — the install profile picks it, settled
@@ -1081,7 +1081,7 @@ Two surfaces: **admin shell** + **public website**. Design:
   HEALTH (privacy/consent). **Deliverable:** demonstrable verticals.
 - **Phase 6 — Flagship & frontier** (later; some research). Job/task marketplace + connector/broker deploy;
   selective-disclosure crypto (SD-JWT/BBS+); full supply-chain provenance federation; advanced website maker;
-  **migrate-to-another-Solid-server demonstration** (OpenLink / QualiaDB — proves §1.4 by demonstration).
+  **migrate-to-another-Solid-server demonstration** (OpenLink Virtuoso — proves §1.4 by demonstration).
   **Deliverable:** the thesis-proving flagships.
 
 **Cross-cutting non-code workstreams (parallel, standards/advocacy):** government-as-issuer engagement (§10.2/

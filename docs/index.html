@@ -402,7 +402,6 @@
           <ul class="feature-list">
             <li><strong>12 Adapter Types:</strong> CKAN, OGC WMS/WFS, STAC (SpatioTemporal Asset Catalog), OPeNDAP, 3D Tiles, OpenStreetMap Overpass, GBIF Biodiversity, SPARQL/Wikidata, IVOA TAP (astronomy), DEM (elevation), and generic REST/Astrometry.</li>
             <li><strong>~90 Curated Endpoints:</strong> Pre-registered in <code>canvas_defaults.rs</code> — spanning NASA GIBS, USGS Astrogeology (Mars/Moon/Venus/Mercury), ESA Gaia DR3, SIMBAD, VizieR, Chandra, ABS statistical boundaries, Geoscience Australia WMS/WFS, and state spatial portals (NSW, VIC, QLD, SA).</li>
-            <li><strong>Zero-Heap Hot Paths:</strong> Adapters build requests and parse responses without heap allocation in hot paths — caller-supplied buffers and stack arrays only, per the QualiaDB two-tier zero-heap contract.</li>
           </ul>
         </div>
         <div>
