@@ -6,6 +6,7 @@
 ## What this is
 
 A minimal CKAN plugin that:
+
 - Emits webhooks to the Databox CKAN Bridge on dataset lifecycle events (created, updated, deleted, datastore changes).
 - Exposes custom Action API endpoints for the bridge to call back for status synchronisation.
 - Adds Databox-specific metadata fields to dataset schemas (provenance IRI, policy IRI, SHACL shape IRI, consent receipt IRI).
